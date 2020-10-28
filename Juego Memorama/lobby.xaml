@@ -1,0 +1,17 @@
+﻿<Window x:Class="Juego_Memorama.lobby"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Juego_Memorama"
+        mc:Ignorable="d"
+        Title="lobby" Height="450" Width="800">
+    <StackPanel Margin="10">
+        <TextBlock FontSize="20">Usuario:
+            <TextBlock Text="{Binding Jugador1}"></TextBlock>
+        </TextBlock>
+        <TextBlock Margin="0,10" FontStyle="Italic" FontSize="20" Text="{Binding Mensaje}"></TextBlock>
+        <TextBlock></TextBlock>
+       
+    </StackPanel>
+</Window>

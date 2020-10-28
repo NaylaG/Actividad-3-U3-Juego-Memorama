@@ -6,7 +6,70 @@
         xmlns:local="clr-namespace:Juego_Memorama"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <Window.Style>
+        <Style>
+            <Setter Property="Window.Visibility" Value="Visible"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MainWindowVisible}" Value="False">
+                    <Setter Property="Window.Visibility" Value="Hidden"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
+    <!--<Window.DataContext>
+        <local:Juego></local:Juego>
+    </Window.DataContext>-->
+    <StackPanel Margin="30">
+        <Label>Nombre:</Label>
+        <TextBox Text="{Binding Jugador1}"></TextBox>
+        <GroupBox Margin="10" Header="Qué deseas hacer?" Padding="10">
+            <StackPanel>
+                <RadioButton Content="Crear Partida" Name="rdbCrear" IsChecked="True"></RadioButton>
+                <RadioButton Content="Unirse Partida" Name="rdbUnirse" ></RadioButton>
+                <WrapPanel Name="ipAdversario" >
+                    <WrapPanel.Style>
+                        <Style>
+                            <Setter Property="WrapPanel.Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=rdbUnirse, Path=IsChecked}" Value="true" >
+                                    <Setter Property="WrapPanel.Visibility" Value="Visible"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </WrapPanel.Style>
+
+                    <TextBlock>IP del adversario:</TextBlock>
+                    <TextBox Text="{Binding IP}" Margin="10,0,0,0" Width='300' Name="txtIp" ></TextBox>
+                </WrapPanel>
+            </StackPanel>
+
+        </GroupBox>
+        <Button Content="Iniciar" HorizontalAlignment="Center" Name="btnIniciar" Command="{Binding IniciarCommand}" CommandParameter="{Binding ElementName=rdbCrear, Path=IsChecked}">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="IsEnabled" Value="False"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=rdbCrear, Path=IsChecked}" Value="True" >
+                            <Setter Property="IsEnabled" Value="True"></Setter>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding ElementName=rdbUnirse, Path=IsChecked}" Value="True">
+                            <Setter Property="IsEnabled" Value="True"></Setter>
+
+                        </DataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ElementName=rdbUnirse, Path=IsChecked}" Value="True" ></Condition>
+                                <Condition Binding="{Binding ElementName=txtIp, Path=Text}" Value="" ></Condition>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsEnabled" Value="False" ></Setter>
+                        </MultiDataTrigger>
+
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </StackPanel>
 </Window>
