@@ -17,9 +17,9 @@
         </Style>
     </Window.Style>
 
-    <!--<Window.DataContext>
-        <local:Juego></local:Juego>
-    </Window.DataContext>-->
+    <Window.DataContext>
+        <local:Memorama></local:Memorama>
+    </Window.DataContext>
     <StackPanel Margin="30">
         <Label>Nombre:</Label>
         <TextBox Text="{Binding Jugador1}"></TextBox>
