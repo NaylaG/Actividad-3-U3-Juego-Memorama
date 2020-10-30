@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -28,6 +27,11 @@ namespace Juego_Memorama
         public string IP { get; set; }
         public string Mensaje { get; set; }
 
+        //Ventanas
+        VentanaJuego juego;
+        lobby VentanaLobby;
+
+        //Comandos
         public ICommand IniciarCommand { get; set; }
 
         HttpListener servidor;
@@ -74,9 +78,19 @@ namespace Juego_Memorama
                 cartas[i] = cartas[j];
                 cartas[j] = temp;
             }
-            Uri uri = new Uri($"/cartas/{cartas[0]}.jpg", UriKind.Absolute);
-            ImageSource imgSource = new BitmapImage(uri);
-            juego.carta1.Source = imgSource;
+
+            juego.carta1.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}//cartas//{cartas[0]}.jpg") as ImageSource;
+            juego.carta2.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[1]}.jpg") as ImageSource;
+            juego.carta3.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[2]}.jpg") as ImageSource;
+            juego.carta4.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[3]}.jpg") as ImageSource;
+            juego.carta5.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[4]}.jpg") as ImageSource;
+            juego.carta6.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[5]}.jpg") as ImageSource;
+            juego.carta7.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[6]}.jpg") as ImageSource;
+            juego.carta8.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[7]}.jpg") as ImageSource;
+            juego.carta9.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[8]}.jpg") as ImageSource;
+            juego.carta10.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[9]}.jpg") as ImageSource;
+            juego.carta11.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[10]}.jpg") as ImageSource;
+            juego.carta12.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[11]}.jpg") as ImageSource;
         }
 
         private async void OnContext(IAsyncResult ar)
@@ -121,7 +135,7 @@ namespace Juego_Memorama
             EnviarComando(new DatoEnviado { Comando = Comando.NombreEnviado, Dato = Jugador2 });
             RecibirComando();
         }
-        VentanaJuego juego;
+
         public async void RecibirComando()
         {
             try
@@ -145,10 +159,11 @@ namespace Juego_Memorama
                             case Comando.NombreEnviado:
                                 Jugador1 = (string)comandoRecibido.Dato;
                                 CambiarMensaje("Conectado con el jugador " + Jugador1);
+
                                 _ = dispatcher.BeginInvoke(new Action(() =>
                                   {
                                       VentanaLobby.Hide();
-                                      VentanaJuego juego = new VentanaJuego();
+                                      juego = new VentanaJuego();
                                       juego.Title = "Cliente";
                                       juego.DataContext = this;
 
@@ -170,7 +185,7 @@ namespace Juego_Memorama
                                 _ = dispatcher.BeginInvoke(new Action(() =>
                                 {
                                     VentanaLobby.Hide();
-                                    VentanaJuego juego = new VentanaJuego();
+                                    juego = new VentanaJuego();
                                     juego.Title = "Servidor";
                                     juego.DataContext = this;
 
@@ -192,7 +207,7 @@ namespace Juego_Memorama
             
         }
 
-        lobby VentanaLobby;
+
         private async void IniciarPartida(bool tipoPartida)
         {
             try
