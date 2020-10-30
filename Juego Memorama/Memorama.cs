@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
@@ -12,6 +13,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.IO;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Juego_Memorama
 {
@@ -58,6 +62,23 @@ namespace Juego_Memorama
             Actualizar();
         }
 
+        public void AsignarCartas()
+        {
+            byte[] cartas = new byte[12] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
+
+            var r = new Random();
+            for (int i = 11; i > 0; i--)
+            {
+                var j = r.Next(0, 12);
+                var temp = cartas[i];
+                cartas[i] = cartas[j];
+                cartas[j] = temp;
+            }
+            Uri uri = new Uri($"/cartas/{cartas[0]}.jpg", UriKind.Absolute);
+            ImageSource imgSource = new BitmapImage(uri);
+            juego.carta1.Source = imgSource;
+        }
+
         private async void OnContext(IAsyncResult ar)
         {
             var context = servidor.EndGetContext(ar);
@@ -100,6 +121,7 @@ namespace Juego_Memorama
             EnviarComando(new DatoEnviado { Comando = Comando.NombreEnviado, Dato = Jugador2 });
             RecibirComando();
         }
+        VentanaJuego juego;
         public async void RecibirComando()
         {
             try
@@ -123,6 +145,18 @@ namespace Juego_Memorama
                             case Comando.NombreEnviado:
                                 Jugador1 = (string)comandoRecibido.Dato;
                                 CambiarMensaje("Conectado con el jugador " + Jugador1);
+                                _ = dispatcher.BeginInvoke(new Action(() =>
+                                  {
+                                      VentanaLobby.Hide();
+                                      VentanaJuego juego = new VentanaJuego();
+                                      juego.Title = "Cliente";
+                                      juego.DataContext = this;
+
+                                      AsignarCartas();
+                                      juego.ShowDialog();
+                                      VentanaLobby.Show();
+                                      
+                                  }));
                                 break;
                         }
                     }
@@ -133,6 +167,18 @@ namespace Juego_Memorama
                             case Comando.NombreEnviado:
                                 Jugador2 = (string)comandoRecibido.Dato;
                                 CambiarMensaje("Conectado con el jugador " + Jugador2);
+                                _ = dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    VentanaLobby.Hide();
+                                    VentanaJuego juego = new VentanaJuego();
+                                    juego.Title = "Servidor";
+                                    juego.DataContext = this;
+
+                                    AsignarCartas();
+                                    juego.ShowDialog();
+                                    VentanaLobby.Show();
+                                    
+                                }));
                                 break;
                         }
                     }

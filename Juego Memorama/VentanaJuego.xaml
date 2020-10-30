@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juego_Memorama"
         mc:Ignorable="d"
-        Title="VentanaJuego" Height="450" Width="800">
-    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40">
-        Hola si se conecta :)
-    </TextBlock>
+        Title="VentanaJuego" Height="650" Width="500">
+    <DockPanel>
+        
+        <TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">Memorama superheroes</TextBlock>
+        <TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">0:00</TextBlock>
+        <UniformGrid Columns="4" Rows="3" Margin="20">
+            <Image x:Name="carta1" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta2" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta3" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta4" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta5" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta6" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta7" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta8" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta9" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta10" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta11" Source="/cartas/1.jpg"></Image>
+            <Image x:Name="carta12" Source="/cartas/1.jpg"></Image>
+        </UniformGrid>
+        
+    </DockPanel>
+ 
 </Window>
