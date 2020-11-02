@@ -132,5 +132,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cartas\0.jpg" />
+    <Resource Include="Cartas\1.jpeg" />
+    <Resource Include="Cartas\2.jpeg" />
+    <Resource Include="Cartas\3.jpeg" />
+    <Resource Include="Cartas\4.jpeg" />
+    <Resource Include="Cartas\5.jpeg" />
+    <Resource Include="Cartas\6.jpeg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

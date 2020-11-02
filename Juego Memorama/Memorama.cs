@@ -19,13 +19,63 @@ using System.Windows.Media.Imaging;
 namespace Juego_Memorama
 {
     public enum Comando { NombreEnviado}
+    //NUEVA CLASE
+    public class Carta
+    {
+        public int IdCarta { get; set; }
+        public string Imagen { get; set; }
+
+    }
     public class Memorama:INotifyPropertyChanged
     {
         //Propiedades para iniciar partida
         public string Jugador1 { get; set; } = "Jugador";
         public string Jugador2 { get; set; }
-        public string IP { get; set; }
+        public string IP { get; set; } = "localhost";
         public string Mensaje { get; set; }
+        //PROPIEDADES NUEVAS
+        public List<Carta> ListaCartas { get; set; } = new List<Carta>();
+        
+        private Carta cartaSeleccionada;
+        public Carta CartaSeleccionada
+        {
+            get { return cartaSeleccionada; }
+            set { cartaSeleccionada = value;
+
+                ValidarCarta();
+            }
+        }
+        public List<Carta> Hisorial { get; set; } = new List<Carta>();
+        //AGREGASTE ESTO
+        public void ValidarCarta()
+        {
+            Hisorial.Add(CartaSeleccionada);
+            if(Hisorial.Count==2)
+            {
+                var num = 0;
+                Carta[] h = new Carta[2];
+                foreach (var item in Hisorial)
+                {                   
+                    h[num] = item;
+                    num++;
+                }
+                   
+                
+                //aqui iria la comparacion
+                if(h[0].IdCarta==h[1].IdCarta)
+                {
+                    CambiarMensaje("Cartas iguales");
+
+                }
+                else
+                {
+                    CambiarMensaje("Vuelve a intentar");
+                }
+                Hisorial.Clear();
+            }
+
+        }
+
 
         //Ventanas
         VentanaJuego juego;
@@ -50,9 +100,9 @@ namespace Juego_Memorama
         {
             dispatcher = Dispatcher.CurrentDispatcher;
             IniciarCommand = new RelayCommand<bool>(IniciarPartida);
-
+            
         }
-
+    
 
         //Servidor crea la partida
         public void CrearPartida()
@@ -66,6 +116,8 @@ namespace Juego_Memorama
             Actualizar();
         }
 
+        
+        
         public void AsignarCartas()
         {
             byte[] cartas = new byte[12] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
@@ -78,19 +130,38 @@ namespace Juego_Memorama
                 cartas[i] = cartas[j];
                 cartas[j] = temp;
             }
+            //AGREGASTE ESTO
+            //List<Carta> ListaCartas = new List<Carta>();
 
-            juego.carta1.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}//cartas//{cartas[0]}.jpg") as ImageSource;
-            juego.carta2.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[1]}.jpg") as ImageSource;
-            juego.carta3.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[2]}.jpg") as ImageSource;
-            juego.carta4.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[3]}.jpg") as ImageSource;
-            juego.carta5.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[4]}.jpg") as ImageSource;
-            juego.carta6.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[5]}.jpg") as ImageSource;
-            juego.carta7.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[6]}.jpg") as ImageSource;
-            juego.carta8.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[7]}.jpg") as ImageSource;
-            juego.carta9.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[8]}.jpg") as ImageSource;
-            juego.carta10.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[9]}.jpg") as ImageSource;
-            juego.carta11.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[10]}.jpg") as ImageSource;
-            juego.carta12.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[11]}.jpg") as ImageSource;
+            for (int i = 0; i < cartas.Length; i++)
+            {
+                Carta nueva = new Carta
+                {
+                    IdCarta = cartas[i],
+                    Imagen = $"Cartas/{cartas[i]}.jpeg",
+                    
+                };
+                ListaCartas.Add(nueva);
+            }
+
+            juego.lstTablero.ItemsSource = ListaCartas;
+
+            //juego.carta1.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}//Cartas//{cartas[0]}.jpeg") as ImageSource;
+            //juego.carta2.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[1]}.jpeg") as ImageSource;
+            //juego.carta3.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[2]}.jpeg") as ImageSource;
+            //juego.carta4.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[3]}.jpeg") as ImageSource;
+            //juego.carta5.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[4]}.jpeg") as ImageSource;
+            //juego.carta6.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[5]}.jpeg") as ImageSource;
+            //juego.carta7.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[6]}.jpeg") as ImageSource;
+            //juego.carta8.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[7]}.jpeg") as ImageSource;
+            //juego.carta9.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[8]}.jpeg") as ImageSource;
+            //juego.carta10.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[9]}.jpeg") as ImageSource;
+            //juego.carta11.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[10]}.jpeg") as ImageSource;
+            //juego.carta12.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[11]}.jpeg") as ImageSource;
+         
+
+
+            
         }
 
         private async void OnContext(IAsyncResult ar)

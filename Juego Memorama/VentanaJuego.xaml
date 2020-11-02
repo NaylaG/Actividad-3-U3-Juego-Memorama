@@ -5,26 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juego_Memorama"
         mc:Ignorable="d"
-        Title="VentanaJuego" Height="650" Width="500">
+        Title="VentanaJuego" Height="650" Width="600">
+    
     <DockPanel>
         
         <TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">Memorama superheroes</TextBlock>
         <TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">0:00</TextBlock>
-        <UniformGrid Columns="4" Rows="3" Margin="20">
-            <Image x:Name="carta1" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta2" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta3" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta4" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta5" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta6" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta7" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta8" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta9" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta10" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta11" Source="/cartas/1.jpg"></Image>
-            <Image x:Name="carta12" Source="/cartas/1.jpg"></Image>
-        </UniformGrid>
-        
+        <TextBlock DockPanel.Dock="Top" FontSize="16" HorizontalAlignment="Center" Text="{Binding Mensaje}"></TextBlock>
+     
+
+        <ListBox Name="lstTablero" ItemsSource="{Binding ListaCartas}" SelectedItem="{Binding CartaSeleccionada}" Padding="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel></WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="0,5">
+                        <StackPanel Background="LemonChiffon" Height="150" Width="110">
+                            <Image Source="{Binding Imagen}"></Image>
+                            <TextBlock HorizontalAlignment="Center" FontSize="20" Text="{Binding IdCarta}"></TextBlock>
+                         </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </DockPanel>
  
 </Window>
