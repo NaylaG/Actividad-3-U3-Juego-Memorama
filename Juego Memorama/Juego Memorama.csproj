@@ -141,5 +141,8 @@
     <Resource Include="Cartas\5.jpeg" />
     <Resource Include="Cartas\6.jpeg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ReversoCarta.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

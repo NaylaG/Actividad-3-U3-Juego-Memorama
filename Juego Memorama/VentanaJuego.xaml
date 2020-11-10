@@ -12,6 +12,13 @@
         <TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">Memorama superheroes</TextBlock>
         <TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">0:00</TextBlock>
         <TextBlock DockPanel.Dock="Top" FontSize="16" HorizontalAlignment="Center" Text="{Binding Mensaje}"></TextBlock>
+        <UniformGrid Columns="4" DockPanel.Dock="Top" Margin="10">
+            <TextBlock Text="{Binding Jugador1}"></TextBlock>
+            <TextBlock Text="{Binding PuntosJugador1}" TextAlignment="Left" FontSize="15"></TextBlock>
+            <TextBlock Text="{Binding Jugador2}"></TextBlock>
+            <TextBlock Text="{Binding PuntosJugador2}" TextAlignment="Right" FontSize="15"></TextBlock>
+        </UniformGrid>
+        
      
 
         <ListBox Name="lstTablero" ItemsSource="{Binding ListaCartas}" SelectedItem="{Binding CartaSeleccionada}" Padding="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
@@ -24,8 +31,18 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="0,5">
-                        <StackPanel Background="LemonChiffon" Height="150" Width="110">
-                            <Image Source="{Binding Imagen}"></Image>
+                        <StackPanel Background="LemonChiffon" Height="150" Width="110" IsEnabled="{Binding Carta.Habilitada}">
+
+                            <Image Source="{Binding Imagen}">
+                                <Image.Style>
+                                    <Style>
+                                        <Style.Triggers>
+
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            
                             <TextBlock HorizontalAlignment="Center" FontSize="20" Text="{Binding IdCarta}"></TextBlock>
                          </StackPanel>
                     </Border>

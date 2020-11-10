@@ -18,12 +18,13 @@ using System.Windows.Media.Imaging;
 
 namespace Juego_Memorama
 {
-    public enum Comando { NombreEnviado}
+    public enum Comando { NombreEnviado, PuntajeEnviado}
     //NUEVA CLASE
     public class Carta
     {
         public int IdCarta { get; set; }
         public string Imagen { get; set; }
+        public bool Habilitada { get; set; } = true;
 
     }
     public class Memorama:INotifyPropertyChanged
@@ -43,9 +44,11 @@ namespace Juego_Memorama
             set { cartaSeleccionada = value;
 
                 ValidarCarta();
+                
             }
         }
         public List<Carta> Hisorial { get; set; } = new List<Carta>();
+
         //AGREGASTE ESTO
         public void ValidarCarta()
         {
@@ -63,9 +66,26 @@ namespace Juego_Memorama
                 
                 //aqui iria la comparacion
                 if(h[0].IdCarta==h[1].IdCarta)
-                {
+                {                   
+                    //Hay que enviar el punteje para que pueda verificar
+                    //Hay que aumentar los puntos
+                    if (cliente != null)
+                    {
+                        PuntosJugador2++;
+                        EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador2 });
+                    }
+                    else
+                    {
+                        PuntosJugador1++;
+                        EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador1 });
+
+                    }
                     CambiarMensaje("Cartas iguales");
 
+                    //Hay que inhabilitar las cartas que acertó
+                    //cartaSeleccionada.Habilitada = false;
+                   
+                    _=VerificarGanador();
                 }
                 else
                 {
@@ -92,15 +112,14 @@ namespace Juego_Memorama
         public event PropertyChangedEventHandler PropertyChanged;
 
         public bool MainWindowVisible { get; set; } = true;
-        public byte PuntosJugador1 { get; set; }
-        public byte PuntosJugador2 { get; set; }
+        public byte PuntosJugador1 { get; set; } = 0;
+        public byte PuntosJugador2 { get; set; } = 0;
 
         //Constructor de la clase
         public Memorama()
         {
             dispatcher = Dispatcher.CurrentDispatcher;
             IniciarCommand = new RelayCommand<bool>(IniciarPartida);
-            
         }
     
 
@@ -217,10 +236,7 @@ namespace Juego_Memorama
                 {
 
                     var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-
-                    string datosRecibidos = Encoding.UTF8.GetString(buffer, 0, result.Count);
-
+                    var datosRecibidos = Encoding.UTF8.GetString(buffer, 0, result.Count);
                     var comandoRecibido = JsonConvert.DeserializeObject<DatoEnviado>(datosRecibidos);
 
                     if (cliente != null)
@@ -239,14 +255,25 @@ namespace Juego_Memorama
                                       juego.DataContext = this;
 
                                       AsignarCartas();
+                                     
                                       juego.ShowDialog();
                                       VentanaLobby.Show();
                                       
                                   }));
                                 break;
+
+                            case Comando.PuntajeEnviado:
+                                dispatcher.Invoke(new Action(() =>
+                                {
+                                    PuntosJugador1 = Convert.ToByte(comandoRecibido.Dato);
+                                    CambiarMensaje("El contrincante ha ganado un punto");
+                                }));
+                                
+                                _ = VerificarGanador();
+                                break;
                         }
                     }
-                    else
+                    else //Este es servidor
                     {
                         switch (comandoRecibido.Comando)
                         {
@@ -261,10 +288,20 @@ namespace Juego_Memorama
                                     juego.DataContext = this;
 
                                     AsignarCartas();
+                                    
+
                                     juego.ShowDialog();
                                     VentanaLobby.Show();
                                     
                                 }));
+                                break;
+                            case Comando.PuntajeEnviado:
+                                dispatcher.Invoke(new Action(() =>
+                                {
+                                    PuntosJugador2 =  Convert.ToByte(comandoRecibido.Dato);
+                                    CambiarMensaje("El contrincante ha ganado un punto");
+                                }));                               
+                               _= VerificarGanador();
                                 break;
                         }
                     }
@@ -278,7 +315,25 @@ namespace Juego_Memorama
             
         }
 
-
+        public bool HayGanador { get; set; } = false;
+        async Task VerificarGanador()
+        {
+            if (PuntosJugador1 == 6 && PuntosJugador2 < 6)
+            {
+                await Task.Delay(1000);
+                HayGanador = true;
+                CambiarMensaje("Gano el jugador 1");
+                
+            }
+            else if(PuntosJugador2==6&&PuntosJugador1<6)
+            {
+                await Task.Delay(1000);
+                HayGanador = true;
+                CambiarMensaje("Gano el jugador 2");               
+            }
+            if (HayGanador)
+                juego.lstTablero.IsEnabled = false;
+        }
         private async void IniciarPartida(bool tipoPartida)
         {
             try
