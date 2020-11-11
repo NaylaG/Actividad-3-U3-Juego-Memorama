@@ -24,8 +24,8 @@ namespace Juego_Memorama
     {
         public int IdCarta { get; set; }
         public string Imagen { get; set; }
-        public bool Habilitada { get; set; } = true;
-
+        public bool Habilitada { get; set; }
+     
     }
     public class Memorama:INotifyPropertyChanged
     {
@@ -33,6 +33,8 @@ namespace Juego_Memorama
         public string Jugador1 { get; set; } = "Jugador";
         public string Jugador2 { get; set; }
         public string IP { get; set; } = "localhost";
+
+      
         public string Mensaje { get; set; }
         //PROPIEDADES NUEVAS
         public List<Carta> ListaCartas { get; set; } = new List<Carta>();
@@ -42,57 +44,83 @@ namespace Juego_Memorama
         {
             get { return cartaSeleccionada; }
             set { cartaSeleccionada = value;
-
                 ValidarCarta();
                 
             }
         }
         public List<Carta> Hisorial { get; set; } = new List<Carta>();
+        public List<Carta> Adivinadas { get; set; } = new List<Carta>();
 
         //AGREGASTE ESTO
         public void ValidarCarta()
         {
-            Hisorial.Add(CartaSeleccionada);
-            if(Hisorial.Count==2)
+            //si la carta esta en la lista de adivinadas
+            //ya no puede ser comparada
+            
+            var YaAdivinada = 0;
+            foreach (var item in Adivinadas)
             {
-                var num = 0;
-                Carta[] h = new Carta[2];
-                foreach (var item in Hisorial)
-                {                   
-                    h[num] = item;
-                    num++;
-                }
-                   
-                
-                //aqui iria la comparacion
-                if(h[0].IdCarta==h[1].IdCarta)
-                {                   
-                    //Hay que enviar el punteje para que pueda verificar
-                    //Hay que aumentar los puntos
-                    if (cliente != null)
+                if (CartaSeleccionada.IdCarta == item.IdCarta)
+                    YaAdivinada++;
+            }
+
+            if(YaAdivinada<1)
+            {
+                Hisorial.Add(CartaSeleccionada);
+                if (Hisorial.Count == 2)
+                {
+                    var num = 0;
+                    Carta[] h = new Carta[2];
+                    foreach (var item in Hisorial)
                     {
-                        PuntosJugador2++;
-                        EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador2 });
+                        
+                        h[num] = item;
+                        num++;
+                    }
+
+
+                    //aqui iria la comparacion
+                    if (h[0].IdCarta == h[1].IdCarta)
+                    {
+                        //Hay que enviar el punteje para que pueda verificar
+                        //Hay que aumentar los puntos
+                        if (cliente != null)
+                        {
+                            PuntosJugador2++;
+                            EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador2 });
+                        }
+                        else
+                        {
+                            PuntosJugador1++;
+                            EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador1 });
+
+                        }
+
+                        Adivinadas.Add(h[0]);
+                        Adivinadas.Add(h[1]);
+                        h[0].Habilitada = false;
+                        h[1].Habilitada = false;
+
+                        CambiarMensaje("Cartas iguales");
+                        //Hay que inhabilitar las cartas que acertó
+                        //cartaSeleccionada.Habilitada = false;
+
+                        _ = VerificarGanador();
                     }
                     else
                     {
-                        PuntosJugador1++;
-                        EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador1 });
-
+                        CambiarMensaje("Vuelve a intentar");
                     }
-                    CambiarMensaje("Cartas iguales");
-
-                    //Hay que inhabilitar las cartas que acertó
-                    //cartaSeleccionada.Habilitada = false;
-                   
-                    _=VerificarGanador();
+                    Hisorial.Clear();
                 }
-                else
-                {
-                    CambiarMensaje("Vuelve a intentar");
-                }
-                Hisorial.Clear();
+              
             }
+            else
+            {
+                Hisorial.Clear();
+                CambiarMensaje("Carta ya adivinada");
+            }
+
 
         }
 
@@ -156,8 +184,9 @@ namespace Juego_Memorama
             {
                 Carta nueva = new Carta
                 {
-                    IdCarta = cartas[i],
+                    IdCarta = cartas[i],                    
                     Imagen = $"Cartas/{cartas[i]}.jpeg",
+                    Habilitada=true,
                     
                 };
                 ListaCartas.Add(nueva);
