@@ -68,43 +68,41 @@ namespace Juego_Memorama
         public List<Carta> Adivinadas { get; set; } = new List<Carta>();
 
         //AGREGASTE ESTO
-        public void ValidarCarta()
+        public async void ValidarCarta()
         {
+            //La carta que seleccionamos se voltea
             CartaSeleccionada.EstaSeleccionada = true;
-            //si la carta esta en la lista de adivinadas
-            //ya no puede ser comparada
 
             var YaAdivinada = 0;
+            
             foreach (var item in Adivinadas)
-            {
+            {   
+                //Si la carta ya ha sido adivinada no contara los puntos al clickearla
                 if (CartaSeleccionada.IdCarta == item.IdCarta)
+                {
                     YaAdivinada++;
+                }
+                    
             }
 
+            //Aqui entra si no habia adivinado la carta anteriormente
             if(YaAdivinada<1)
-            {
-                
+            {               
                 Hisorial.Add(CartaSeleccionada);
-                //Hisorial[0].EstaSeleccionada = true;
-                //Hisorial[1].EstaSeleccionada = true;
+
                 if (Hisorial.Count == 2)
-                {
-                   
+                {                 
                     var num = 0;
                     Carta[] h = new Carta[2];
                     foreach (var item in Hisorial)
-                    {
-                        
+                    {                        
                         h[num] = item;
                         num++;
                     }
 
-
-                    //aqui iria la comparacion
+                    //Comparamos el ID de las cartas
                     if (h[0].IdCarta == h[1].IdCarta)
                     {
-                        //Hay que enviar el punteje para que pueda verificar
-                        //Hay que aumentar los puntos
                         if (cliente != null)
                         {
                             PuntosJugador2++;
@@ -116,24 +114,23 @@ namespace Juego_Memorama
                             EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador1 });
 
                         }
-                        //h[0].EstaSeleccionada = true;
-                        //h[1].EstaSeleccionada = true;
                         Adivinadas.Add(h[0]);
                         Adivinadas.Add(h[1]);
                         
-
+                        
                         CambiarMensaje("Cartas iguales");
-                        //Hay que inhabilitar las cartas que acertó
-                        //cartaSeleccionada.Habilitada = false;
-
                         _ = VerificarGanador();
                     }
                     else
                     {
-                        //h[0].EstaSeleccionada = false;
-                        //h[1].EstaSeleccionada = false;
 
-                        CambiarMensaje("Vuelve a intentar");
+                        h[1].EstaSeleccionada = true;
+                        juego.lstTablero.IsEnabled = false;
+                        await Task.Delay(1500);
+                        juego.lstTablero.IsEnabled = true;
+                        h[0].EstaSeleccionada = false;
+                        h[1].EstaSeleccionada = false;
+                        CambiarMensaje("Vuelve a intentar");                        
                     }
                    
                     Hisorial.Clear();
@@ -187,13 +184,13 @@ namespace Juego_Memorama
             Mensaje = "Esperando que se conecte un adversario...";
             Actualizar();
         }
-
-        
         
         public void AsignarCartas()
         {
+            //Creamos un arreglo con los Ids de las cartas
             byte[] cartas = new byte[12] { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
 
+            //Desordenamos el arreglo
             var r = new Random();
             for (int i = 11; i > 0; i--)
             {
@@ -202,9 +199,9 @@ namespace Juego_Memorama
                 cartas[i] = cartas[j];
                 cartas[j] = temp;
             }
-            //AGREGASTE ESTO
-            //List<Carta> ListaCartas = new List<Carta>();
 
+
+            //Instanciamos las cartas por cada posicion del arreglo
             for (int i = 0; i < cartas.Length; i++)
             {
                 Carta nueva = new Carta
@@ -216,12 +213,8 @@ namespace Juego_Memorama
                 };
                 ListaCartas.Add(nueva);
             }
-
-            juego.lstTablero.ItemsSource = ListaCartas;
-
-    
-
-            
+            //Le decimos a la ventana de donde va a sacar los Items
+            juego.lstTablero.ItemsSource = ListaCartas;           
         }
 
         private async void OnContext(IAsyncResult ar)
@@ -330,7 +323,6 @@ namespace Juego_Memorama
 
                                     AsignarCartas();
                                     
-
                                     juego.ShowDialog();
                                     VentanaLobby.Show();
                                     
@@ -363,17 +355,28 @@ namespace Juego_Memorama
             {
                 await Task.Delay(1000);
                 HayGanador = true;
-                CambiarMensaje("Gano el jugador 1");
-                
+                CambiarMensaje($"El juego ha terminado. Gano {Jugador1}");
+
+                MessageBox.Show($"El juego ha terminado. Gano {Jugador1}", "Ganador", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+
+
             }
             else if(PuntosJugador2==6&&PuntosJugador1<6)
             {
                 await Task.Delay(1000);
                 HayGanador = true;
-                CambiarMensaje("Gano el jugador 2");               
+                CambiarMensaje($"El juego ha terminado. Gano {Jugador2}");
+                MessageBox.Show($"El juego ha terminado. Gano {Jugador2}", "Ganador", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+               
             }
             if (HayGanador)
+            {
                 juego.lstTablero.IsEnabled = false;
+                await Task.Delay(2000);
+                juego.Close();
+                VentanaLobby.Show();
+            }       
         }
         private async void IniciarPartida(bool tipoPartida)
         {
