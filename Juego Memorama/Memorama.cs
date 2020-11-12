@@ -20,12 +20,26 @@ namespace Juego_Memorama
 {
     public enum Comando { NombreEnviado, PuntajeEnviado}
     //NUEVA CLASE
-    public class Carta
+    public class Carta:INotifyPropertyChanged
     {
         public int IdCarta { get; set; }
         public string Imagen { get; set; }
-        public bool Habilitada { get; set; }
-     
+        private bool seleccionada;
+
+        public bool EstaSeleccionada
+        {
+            get { return seleccionada; }
+            set {
+                seleccionada = value;
+                AlHaberCambio("EstaSeleccionada");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void AlHaberCambio(string propiedad)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propiedad));
+        }
     }
     public class Memorama:INotifyPropertyChanged
     {
@@ -33,8 +47,9 @@ namespace Juego_Memorama
         public string Jugador1 { get; set; } = "Jugador";
         public string Jugador2 { get; set; }
         public string IP { get; set; } = "localhost";
+       
 
-      
+
         public string Mensaje { get; set; }
         //PROPIEDADES NUEVAS
         public List<Carta> ListaCartas { get; set; } = new List<Carta>();
@@ -44,6 +59,7 @@ namespace Juego_Memorama
         {
             get { return cartaSeleccionada; }
             set { cartaSeleccionada = value;
+               
                 ValidarCarta();
                 
             }
@@ -54,9 +70,10 @@ namespace Juego_Memorama
         //AGREGASTE ESTO
         public void ValidarCarta()
         {
+            CartaSeleccionada.EstaSeleccionada = true;
             //si la carta esta en la lista de adivinadas
             //ya no puede ser comparada
-            
+
             var YaAdivinada = 0;
             foreach (var item in Adivinadas)
             {
@@ -66,9 +83,13 @@ namespace Juego_Memorama
 
             if(YaAdivinada<1)
             {
+                
                 Hisorial.Add(CartaSeleccionada);
+                //Hisorial[0].EstaSeleccionada = true;
+                //Hisorial[1].EstaSeleccionada = true;
                 if (Hisorial.Count == 2)
                 {
+                   
                     var num = 0;
                     Carta[] h = new Carta[2];
                     foreach (var item in Hisorial)
@@ -95,11 +116,11 @@ namespace Juego_Memorama
                             EnviarComando(new DatoEnviado { Comando = Comando.PuntajeEnviado, Dato = PuntosJugador1 });
 
                         }
-
+                        //h[0].EstaSeleccionada = true;
+                        //h[1].EstaSeleccionada = true;
                         Adivinadas.Add(h[0]);
                         Adivinadas.Add(h[1]);
-                        h[0].Habilitada = false;
-                        h[1].Habilitada = false;
+                        
 
                         CambiarMensaje("Cartas iguales");
                         //Hay que inhabilitar las cartas que acertó
@@ -109,8 +130,12 @@ namespace Juego_Memorama
                     }
                     else
                     {
+                        //h[0].EstaSeleccionada = false;
+                        //h[1].EstaSeleccionada = false;
+
                         CambiarMensaje("Vuelve a intentar");
                     }
+                   
                     Hisorial.Clear();
                 }
               
@@ -186,7 +211,7 @@ namespace Juego_Memorama
                 {
                     IdCarta = cartas[i],                    
                     Imagen = $"Cartas/{cartas[i]}.jpeg",
-                    Habilitada=true,
+                    EstaSeleccionada = false,
                     
                 };
                 ListaCartas.Add(nueva);
@@ -194,20 +219,7 @@ namespace Juego_Memorama
 
             juego.lstTablero.ItemsSource = ListaCartas;
 
-            //juego.carta1.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}//Cartas//{cartas[0]}.jpeg") as ImageSource;
-            //juego.carta2.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[1]}.jpeg") as ImageSource;
-            //juego.carta3.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[2]}.jpeg") as ImageSource;
-            //juego.carta4.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[3]}.jpeg") as ImageSource;
-            //juego.carta5.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[4]}.jpeg") as ImageSource;
-            //juego.carta6.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[5]}.jpeg") as ImageSource;
-            //juego.carta7.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[6]}.jpeg") as ImageSource;
-            //juego.carta8.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[7]}.jpeg") as ImageSource;
-            //juego.carta9.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[8]}.jpeg") as ImageSource;
-            //juego.carta10.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[9]}.jpeg") as ImageSource;
-            //juego.carta11.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[10]}.jpeg") as ImageSource;
-            //juego.carta12.Source = new ImageSourceConverter().ConvertFromString($"{AppDomain.CurrentDomain.BaseDirectory}/cartas/{cartas[11]}.jpeg") as ImageSource;
-         
-
+    
 
             
         }

@@ -23,5 +23,7 @@ namespace Juego_Memorama
         {
             InitializeComponent();
         }
+
+       
     }
 }

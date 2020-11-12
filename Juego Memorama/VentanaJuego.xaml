@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juego_Memorama"
         mc:Ignorable="d"
-        Title="VentanaJuego" Height="650" Width="600">
+        Title="VentanaJuego" Height="680" Width="600">
     
     <DockPanel >
         
@@ -19,39 +19,36 @@
             <TextBlock Text="{Binding PuntosJugador2}" TextAlignment="Right" FontSize="15"></TextBlock>
         </UniformGrid>
  
-        <ListBox Name="lstTablero" ItemsSource="{Binding ListaCartas}" SelectedItem="{Binding CartaSeleccionada}" Padding="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <ListBox Name="lstTablero" ItemsSource="{Binding ListaCartas}"  SelectedItem="{Binding CartaSeleccionada}" Padding="10"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+          
 
-            
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="4" Rows="3"></UniformGrid>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate >
-                <DataTemplate  >
-                    <GroupItem Margin="0,5" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
 
-                        <StackPanel  Height="150" Width="110" >
+                    <Image   Margin="0,5" HorizontalAlignment="Center" VerticalAlignment="Center" Height="150" Width="110" >
 
-                            <Image  Source="{Binding Imagen}" >
-                                <!--<Image.Style>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Source" Value="{Binding ImagenNoHabilitada}"></Setter>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ElementName=ListaCartas, Path=Habilitado}" Value="false">
-                                                <Setter Property="Source" Value="{Binding Imagen}"></Setter>
-                                            </DataTrigger>
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Source" Value="Cartas/0.jpg"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding EstaSeleccionada}" Value="true">
+                                        <Setter Property="Source" Value="{Binding Imagen}"></Setter>
+                                    </DataTrigger>
 
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>-->
-                            </Image>
-                            
-                            <!--<TextBlock HorizontalAlignment="Center" FontSize="20" Text="{Binding IdCarta}"></TextBlock>-->
-                         </StackPanel>
-                    </GroupItem>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+
                 </DataTemplate>
             </ListBox.ItemTemplate>
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="4" Rows="3" Margin="10"></UniformGrid>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+           
         </ListBox>
     </DockPanel>
  
