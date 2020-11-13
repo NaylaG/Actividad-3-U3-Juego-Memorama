@@ -291,6 +291,7 @@ namespace Juego_Memorama
                                       AsignarCartas();
                                      
                                       juego.ShowDialog();
+                                      VentanaLobby.txtNombre.Text = Jugador2;
                                       VentanaLobby.Show();
                                       
                                   }));

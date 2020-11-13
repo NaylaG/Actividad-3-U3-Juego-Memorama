@@ -15,7 +15,7 @@
     </Window.Background>
     <DockPanel Margin="20">
         <TextBlock FontSize="20" Foreground="White" DockPanel.Dock="Top" FontFamily="OCR A Extended">Usuario:
-            <TextBlock Text="{Binding Jugador1}"></TextBlock>
+            <TextBlock Text="{Binding Jugador1}" Name="txtNombre"></TextBlock>
         </TextBlock>
         <TextBlock Margin="0,10" FontStyle="Italic" FontSize="15" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="OCR A Extended"
                    DockPanel.Dock="Bottom" TextWrapping="Wrap">
