@@ -5,41 +5,61 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juego_Memorama"
         mc:Ignorable="d"
-        Title="VentanaJuego" Height="680" Width="600">
-    
-    <DockPanel >
-        
-        <TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">Memorama superheroes</TextBlock>
+        Title="VentanaJuego" Height="750" Width="610">
+    <Window.Background>
+        <RadialGradientBrush>
+            <GradientStop Color="#FF1E1E85" Offset="0"/>
+            <GradientStop Color="#FF03031D" Offset="1"/>
+        </RadialGradientBrush>
+    </Window.Background>
+
+    <DockPanel  Margin="10" >
+
+        <TextBlock DockPanel.Dock="Top" Padding="15" FontSize="35" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" FontFamily="OCR A Extended">Memorama</TextBlock>
         <!--<TextBlock DockPanel.Dock="Top" FontSize="30" HorizontalAlignment="Center">0:00</TextBlock>-->
-        <TextBlock DockPanel.Dock="Top" FontSize="16" HorizontalAlignment="Center" Text="{Binding Mensaje}"></TextBlock>
+        <TextBlock DockPanel.Dock="Top" FontStyle="Italic" Foreground="White" FontSize="14" HorizontalAlignment="Center" Text="{Binding Mensaje}"></TextBlock>
         <UniformGrid Columns="4" DockPanel.Dock="Top" Margin="10">
-            <TextBlock Text="{Binding Jugador1}"></TextBlock>
-            <TextBlock Text="{Binding PuntosJugador1}" TextAlignment="Left" FontSize="15"></TextBlock>
-            <TextBlock Text="{Binding Jugador2}"></TextBlock>
-            <TextBlock Text="{Binding PuntosJugador2}" TextAlignment="Right" FontSize="15"></TextBlock>
+            <UniformGrid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="Arial"></Setter>
+                    <Setter Property="Foreground" Value="White"></Setter>
+                    <Setter Property="FontSize" Value="15"></Setter>
+                    <Setter Property="FontFamily" Value="OCR A Extended"></Setter>
+                </Style>
+            </UniformGrid.Resources>
+            <TextBlock Text="{Binding Jugador1}" TextAlignment="Center" ></TextBlock>
+
+            <TextBlock Text="{Binding PuntosJugador1}" TextAlignment="Left" FontFamily="Arial"></TextBlock>
+            <TextBlock Text="{Binding PuntosJugador2}" TextAlignment="Right" FontFamily="Arial" ></TextBlock>
+            <TextBlock Text="{Binding Jugador2}" TextAlignment="Center"></TextBlock>
         </UniformGrid>
- 
-        <ListBox Name="lstTablero" ItemsSource="{Binding ListaCartas}"  SelectedItem="{Binding CartaSeleccionada}" Padding="10"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
-          
+
+        <ListBox Background="White" Name="lstTablero" ItemsSource="{Binding ListaCartas}"  SelectedItem="{Binding CartaSeleccionada}" Padding="10"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
+
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Image   Margin="0,5" HorizontalAlignment="Center" VerticalAlignment="Center" Height="150" Width="110" >
+                    <Border Background="#FF0A0527" Padding="5" CornerRadius="10"  >
+                        <Border.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Black" ShadowDepth="3"></DropShadowBitmapEffect>
+                        </Border.BitmapEffect>
+                        <Image   Margin="0,5" HorizontalAlignment="Center" VerticalAlignment="Center" Height="150" Width="110" >
 
-                        <Image.Style>
-                            <Style TargetType="Image">
-                                <Setter Property="Source" Value="Cartas/0.jpg"></Setter>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding EstaSeleccionada}" Value="true">
-                                        <Setter Property="Source" Value="{Binding Imagen}"></Setter>
-                                    </DataTrigger>
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="Cartas/0.jpg"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding EstaSeleccionada}" Value="true">
+                                            <Setter Property="Source" Value="{Binding Imagen}"></Setter>
+                                        </DataTrigger>
 
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
 
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
 
@@ -48,8 +68,8 @@
                     <UniformGrid Columns="4" Rows="3" Margin="10"></UniformGrid>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
-           
+
         </ListBox>
     </DockPanel>
- 
+
 </Window>

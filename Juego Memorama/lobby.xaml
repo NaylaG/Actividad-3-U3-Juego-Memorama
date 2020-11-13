@@ -5,13 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Juego_Memorama"
         mc:Ignorable="d"
-        Title="lobby" Height="450" Width="800">
-    <StackPanel Margin="10">
-        <TextBlock FontSize="20">Usuario:
+        Title="lobby" Height="450" Width="650">
+    <Window.Background>
+        <RadialGradientBrush>
+            <GradientStop Color="#FF141489" Offset="0.045"/>
+            <GradientStop Color="#FF020219" Offset="1"/>
+            <GradientStop Color="#FF060640" Offset="0.552"/>
+        </RadialGradientBrush>
+    </Window.Background>
+    <DockPanel Margin="20">
+        <TextBlock FontSize="20" Foreground="White" DockPanel.Dock="Top" FontFamily="OCR A Extended">Usuario:
             <TextBlock Text="{Binding Jugador1}"></TextBlock>
         </TextBlock>
-        <TextBlock Margin="0,10" FontStyle="Italic" FontSize="20" Text="{Binding Mensaje}"></TextBlock>
-        <TextBlock></TextBlock>
+        <TextBlock Margin="0,10" FontStyle="Italic" FontSize="20" Text="{Binding Mensaje}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="OCR A Extended"></TextBlock>
+        
        
-    </StackPanel>
+    </DockPanel>
 </Window>
