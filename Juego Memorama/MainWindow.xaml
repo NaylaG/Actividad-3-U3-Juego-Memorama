@@ -67,10 +67,13 @@
                 </StackPanel>
 
             </GroupBox>
-            <Button Padding="10" Content="Iniciar" HorizontalAlignment="Center" Name="btnIniciar" Command="{Binding IniciarCommand}" CommandParameter="{Binding ElementName=rdbCrear, Path=IsChecked}">
+            <Button Padding="10" HorizontalAlignment="Center" Name="btnIniciar" Command="{Binding IniciarCommand}" CommandParameter="{Binding ElementName=rdbCrear, Path=IsChecked}">
                 <Button.Style>
                     <Style TargetType="Button">
+                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Setter Property="BorderThickness" Value="0"></Setter>
                         <Setter Property="IsEnabled" Value="False"></Setter>
+                        
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=rdbCrear, Path=IsChecked}" Value="True" >
                                 <Setter Property="IsEnabled" Value="True"></Setter>
@@ -91,7 +94,9 @@
 
                         </Style.Triggers>
                     </Style>
+                    
                 </Button.Style>
+                <Image Height="60" Source="boton2.png"></Image>
             </Button>
         </StackPanel>
     </StackPanel>

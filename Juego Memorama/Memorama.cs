@@ -285,7 +285,7 @@ namespace Juego_Memorama
                                   {
                                       VentanaLobby.Hide();
                                       juego = new VentanaJuego();
-                                      juego.Title = "Cliente";
+                                      juego.Title = Jugador2;
                                       juego.DataContext = this;
 
                                       AsignarCartas();
@@ -318,7 +318,7 @@ namespace Juego_Memorama
                                 {
                                     VentanaLobby.Hide();
                                     juego = new VentanaJuego();
-                                    juego.Title = "Servidor";
+                                    juego.Title = Jugador1;
                                     juego.DataContext = this;
 
                                     AsignarCartas();
@@ -348,35 +348,24 @@ namespace Juego_Memorama
             
         }
 
-        public bool HayGanador { get; set; } = false;
         async Task VerificarGanador()
         {
-            if (PuntosJugador1 == 6 && PuntosJugador2 < 6)
-            {
-                await Task.Delay(1000);
-                HayGanador = true;
-                CambiarMensaje($"El juego ha terminado. Gano {Jugador1}");
-
-                MessageBox.Show($"El juego ha terminado. Gano {Jugador1}", "Ganador", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
-
-
-            }
-            else if(PuntosJugador2==6&&PuntosJugador1<6)
-            {
-                await Task.Delay(1000);
-                HayGanador = true;
-                CambiarMensaje($"El juego ha terminado. Gano {Jugador2}");
-                MessageBox.Show($"El juego ha terminado. Gano {Jugador2}", "Ganador", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-               
-            }
-            if (HayGanador)
+            if(PuntosJugador1==6&PuntosJugador2==6)
             {
                 juego.lstTablero.IsEnabled = false;
-                await Task.Delay(2000);
+                CambiarMensaje($"El juego termino. Ambos jugadores empataron");
+                await Task.Delay(3000);
                 juego.Close();
-                VentanaLobby.Show();
-            }       
+                
+            }
+            if(PuntosJugador1==6||PuntosJugador2==6)
+            {
+                juego.lstTablero.IsEnabled = false;
+                CambiarMensaje($"El juego termino. Gano: {((PuntosJugador1 > PuntosJugador2) ? Jugador1 : Jugador2)}");
+                await Task.Delay(3000);
+                juego.Close();
+ 
+            }   
         }
         private async void IniciarPartida(bool tipoPartida)
         {

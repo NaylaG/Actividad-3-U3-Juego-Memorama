@@ -144,5 +144,8 @@
   <ItemGroup>
     <Resource Include="ReversoCarta.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="boton2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
