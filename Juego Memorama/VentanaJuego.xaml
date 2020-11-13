@@ -29,8 +29,16 @@
             </UniformGrid.Resources>
             <TextBlock Text="{Binding Jugador1}" TextAlignment="Center" ></TextBlock>
 
-            <TextBlock Text="{Binding PuntosJugador1}" TextAlignment="Left" FontFamily="Arial"></TextBlock>
-            <TextBlock Text="{Binding PuntosJugador2}" TextAlignment="Right" FontFamily="Arial" ></TextBlock>
+            <TextBlock Text="{Binding PuntosJugador1}" TextAlignment="Left" FontFamily="Arial">
+                <TextBlock.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Aqua" Softness="0.4" ShadowDepth="2" ></DropShadowBitmapEffect>
+                </TextBlock.BitmapEffect>
+            </TextBlock>
+            <TextBlock Text="{Binding PuntosJugador2}" TextAlignment="Right" FontFamily="Arial" >
+                <TextBlock.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Aqua" Softness="0.4" ShadowDepth="2" ></DropShadowBitmapEffect>
+                </TextBlock.BitmapEffect>
+            </TextBlock>
             <TextBlock Text="{Binding Jugador2}" TextAlignment="Center"></TextBlock>
         </UniformGrid>
 
